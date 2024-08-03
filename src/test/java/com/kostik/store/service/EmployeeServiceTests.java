@@ -30,13 +30,13 @@ public class EmployeeServiceTests {
     public void testFindByLogin() {
         // Arrange
         String testLogin = "john.doe";
-        Employee mockEmployee = new Employee();
+        User mockEmployee = new User();
         mockEmployee.setLogin(testLogin);
 
         when(employeeRepository.findByLogin(testLogin)).thenReturn(mockEmployee);
 
         // Act
-        Employee result = employeeService.findByLogin(testLogin);
+        User result = employeeService.findByLogin(testLogin);
 
         // Assert
         assertThat(result).isNotNull();
@@ -46,12 +46,12 @@ public class EmployeeServiceTests {
     @Test
     public void testGetEmployees() {
         // Arrange
-        List<Employee> mockEmployees = Arrays.asList(new Employee(), new Employee(), new Employee());
+        List<User> mockEmployees = Arrays.asList(new User(), new User(), new User());
 
         when(employeeRepository.findAll()).thenReturn(mockEmployees);
 
         // Act
-        List<Employee> result = employeeService.getEmployees();
+        List<User> result = employeeService.getUsers();
 
         // Assert
         assertThat(result).isNotNull();

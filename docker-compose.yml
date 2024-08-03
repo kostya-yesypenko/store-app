@@ -1,0 +1,29 @@
+version: '3.8'
+
+services:
+  db:
+    image: mysql:8.0
+    container_name: shop_db
+    environment:
+      MYSQL_DATABASE: shop
+      MYSQL_ROOT_PASSWORD: root
+    ports:
+      - "3307:3306"
+    volumes:
+      - db_data:/var/lib/mysql
+      - ./init-db:/docker-entrypoint-initdb.d
+      
+  app:
+    build: .
+    container_name: spring_app
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://db:3306/shop
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: root
+    ports:
+      - "8080:8080"
+    depends_on:
+      - db
+
+volumes:
+  db_data:

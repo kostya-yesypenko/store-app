@@ -27,10 +27,10 @@ public class Product {
 	@Column
 	private Long qty;
 	
-	@Column(length = 250)
+	@Column
 	private String img;
 	
 	@ManyToOne
-    @JoinColumn(name = "category_id", nullable = false)
+    @JoinColumn(name = "category_id")
     private Category category;
 }

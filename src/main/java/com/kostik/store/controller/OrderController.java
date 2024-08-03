@@ -1,9 +1,12 @@
 package com.kostik.store.controller;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -12,8 +15,8 @@ import org.springframework.web.bind.annotation.RestController;
 import com.kostik.store.domain.Order;
 import com.kostik.store.dto.OrderRequest;
 import com.kostik.store.service.OrderService;
-import com.kostik.store.service.OrderService.EmployeeNotFoundException;
 import com.kostik.store.service.OrderService.ProductNotFoundException;
+import com.kostik.store.service.OrderService.UserNotFoundException;
 
 @RestController
 @CrossOrigin("http://localhost:3000")
@@ -21,6 +24,11 @@ import com.kostik.store.service.OrderService.ProductNotFoundException;
 public class OrderController {
 	@Autowired
 	private OrderService orderService;
+	
+	@GetMapping("/orders")
+	List<Order> getOrders(){
+		return orderService.getOrders();
+	}
 
 	@PostMapping("/order")
 	public ResponseEntity<?> createOrder(@RequestBody OrderRequest request) {
@@ -30,7 +38,7 @@ public class OrderController {
 
 			
 			return new ResponseEntity<>(createdOrder, HttpStatus.CREATED);
-		} catch (EmployeeNotFoundException e) {
+		} catch (UserNotFoundException e) {
 			// Handle the case where the employee is not found
 			String errorMessage = "User is not registered with the provided email.";
 			return new ResponseEntity<>(errorMessage, HttpStatus.NOT_FOUND);

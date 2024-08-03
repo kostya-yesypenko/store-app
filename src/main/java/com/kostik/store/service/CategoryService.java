@@ -1,6 +1,7 @@
 package com.kostik.store.service;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -24,6 +25,10 @@ public class CategoryService {
 
 	public Category findByName(String name) {
 		return categoryRepository.findByName(name);
+	}
+	
+	public Optional<Category> findById(Long id) {
+		return categoryRepository.findById(id);
 	}
 
 	public List<Category> getCategories() {

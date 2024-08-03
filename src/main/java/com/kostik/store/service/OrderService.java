@@ -1,5 +1,7 @@
 package com.kostik.store.service;
 
+import java.util.List;
+
 import javax.sql.DataSource;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -7,12 +9,12 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 
-import com.kostik.store.domain.Employee;
 import com.kostik.store.domain.Order;
 import com.kostik.store.domain.Product;
-import com.kostik.store.repository.EmployeeRepository;
+import com.kostik.store.domain.User;
 import com.kostik.store.repository.OrderRepository;
 import com.kostik.store.repository.ProductRepository;
+import com.kostik.store.repository.UserRepository;
 
 import jakarta.annotation.PostConstruct;
 import jakarta.transaction.Transactional;
@@ -23,7 +25,7 @@ import lombok.extern.log4j.Log4j2;
 public class OrderService {
 
 	@Autowired
-	private EmployeeRepository employeeRepository;
+	private UserRepository userRepository;
 
 	@Autowired
 	private ProductRepository productRepository;
@@ -44,13 +46,13 @@ public class OrderService {
 	}
 
 	@Transactional
-	public Order createOrder(String email, Long productId, Long quantity, Double price) throws EmployeeNotFoundException, ProductNotFoundException {
+	public Order createOrder(String email, Long productId, Long quantity, Double price) throws UserNotFoundException, ProductNotFoundException {
 		// Find the employee by email
-		Employee employee = employeeRepository.findByEmail(email);
+		User employee = userRepository.findByEmail(email);
 
 		if (employee == null) {
 			log.error("Employee with email = {} not found", email);
-			throw new EmployeeNotFoundException("Employee not found with email: " + email);
+			throw new UserNotFoundException("Employee not found with email: " + email);
 		}		
 
 		// Find the product by productId
@@ -74,9 +76,13 @@ public class OrderService {
 		
 		return savedOrder;
 	}
+	
+	public List<Order> getOrders() {
+		return (orderRepository.findAll());
+	}
 
-	public class EmployeeNotFoundException extends Exception {
-		public EmployeeNotFoundException(String message) {
+	public class UserNotFoundException extends Exception {
+		public UserNotFoundException(String message) {
 			super(message);
 		}
 	}
@@ -86,5 +92,7 @@ public class OrderService {
 			super(message);
 		}
 	}
+
+
 
 }
