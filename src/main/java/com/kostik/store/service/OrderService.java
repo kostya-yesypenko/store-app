@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 
+import com.kostik.store.domain.Cart;
 import com.kostik.store.domain.Order;
 import com.kostik.store.domain.Product;
 import com.kostik.store.domain.User;
@@ -18,10 +19,10 @@ import com.kostik.store.repository.UserRepository;
 
 import jakarta.annotation.PostConstruct;
 import jakarta.transaction.Transactional;
-import lombok.extern.log4j.Log4j2;
+import lombok.extern.slf4j.Slf4j;
 
 @Service
-@Log4j2
+@Slf4j
 public class OrderService {
 
 	@Autowired
@@ -34,7 +35,6 @@ public class OrderService {
 	private OrderRepository orderRepository;
 	
 	@Autowired
-	@Qualifier("ds1")
 	private DataSource ds;
 	
 	@Autowired
@@ -44,17 +44,8 @@ public class OrderService {
 	void init() {
 		log.debug("Order service bean has been constructed");
 	}
-
-	@Transactional
-	public Order createOrder(String email, Long productId, Long quantity, Double price) throws UserNotFoundException, ProductNotFoundException {
-		// Find the employee by email
-		User employee = userRepository.findByEmail(email);
-
-		if (employee == null) {
-			log.error("Employee with email = {} not found", email);
-			throw new UserNotFoundException("Employee not found with email: " + email);
-		}		
-
+	
+	public Order createOrder(User user, Long productId, Long quantity, Double price) throws UserNotFoundException, ProductNotFoundException {		
 		// Find the product by productId
 		Product product = productRepository.findById(productId).orElse(null);
 
@@ -64,17 +55,33 @@ public class OrderService {
 
 		// Create a new OrderEntity
 		Order order = new Order();
-		order.setEmployee(employee);
+		order.setUser(user);
 		order.setProduct(product);
 		order.setQty(quantity);
 		order.setPrice(price);
-		Order savedOrder = orderRepository.save(order);
+				
+		return order;
+	}
+	
 
-		//Update product quantity by subtracting order quantity
-		product.setQty(product.getQty()-quantity);
-		productRepository.save(product);
+
+	@Transactional
+	public Order saveOrder(Order order) throws Exception {
+		Order dbOrder = orderRepository.save(order);
 		
-		return savedOrder;
+		if (dbOrder == null) {
+			throw new Exception("Can not create order");
+		}
+
+		Product product = order.getProduct();
+
+		if (product == null) {
+			throw new ProductNotFoundException("Product not found");
+		}
+		// Update product quantity by subtracting order quantity
+		product.setQty(product.getQty() - order.getQty());
+		productRepository.save(product);
+		return dbOrder;
 	}
 	
 	public List<Order> getOrders() {

@@ -19,12 +19,12 @@ public class SessionUserDataProvider implements UserDataProvider {
 	HttpSession session;
 
     @Override
-    public void save(String id, Map<String, String> data) {
+    public void save(Long userId, Map<String, String> data) {
         session.setAttribute(UserDataProvider.SETTINGS_ID, data);
     }
 
     @Override
-    public Map<String, String> load(String id) {
+    public Map<String, String> load(Long userId) {
         Map<String, String> settings = (Map<String, String>) session.getAttribute(UserDataProvider.SETTINGS_ID);
         if (settings == null) {
             settings = new HashMap<>();
