@@ -22,7 +22,7 @@ public class CookieUserDataProvider implements UserDataProvider {
 	HttpServletResponse response;
 	
 	@Override
-	public void save(String id, Map<String, String> data) {
+	public void save(Long userId, Map<String, String> data) {
 		String value = UserDataUtils.mapToString(data);
 		Cookie cookie = new Cookie(UserDataProvider.SETTINGS_ID, value);
         // Set cookie attributes
@@ -37,20 +37,20 @@ public class CookieUserDataProvider implements UserDataProvider {
 	}
 
 	@Override
-    public Map<String, String> load(String id) {
+    public Map<String, String> load(Long userId) {
         Cookie[] cookies = request.getCookies();
-        Map<String, String> responseMap = new HashMap<>();
+        Map<String, String> userData = new HashMap<>();
         
         if (cookies != null) {
             for (Cookie cookie : cookies) {
-                // Convert each cookie's value to a map
-                Map<String, String> cookieMap = UserDataUtils.stringToMap(cookie.getValue());
-                // Merge the cookie map into the response map
-                responseMap.putAll(cookieMap);
+            	if (UserDataProvider.SETTINGS_ID.equalsIgnoreCase(cookie.getName())) {            
+                    userData.putAll(UserDataUtils.stringToMap(cookie.getValue()));
+                    break;
+            	}                
             }
         }
         
-        return responseMap;
+        return userData;
     }
 	
 }

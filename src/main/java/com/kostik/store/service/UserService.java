@@ -12,18 +12,18 @@ import com.kostik.store.repository.UserRepository;
 public class UserService {
 	
 	@Autowired
-	private UserRepository UserRepository;
+	private UserRepository userRepository;
 	
-	public UserService(UserRepository employeeRepository) {
-		this.UserRepository = employeeRepository;
+	public UserService(UserRepository userRepository) {
+		this.userRepository = userRepository;
 	}
 
 	public User findByLogin(String login) {
-		return UserRepository.findByLogin(login);
+		return userRepository.findByLogin(login);
 	}
 
 	public List<User> getUsers() {
-		return UserRepository.findAll();
+		return userRepository.findAll();
 	}
 	
 	

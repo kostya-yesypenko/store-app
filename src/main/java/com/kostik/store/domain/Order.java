@@ -9,9 +9,11 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 @Data
 @Entity
+@EqualsAndHashCode(of = {"user", "product"})
 @Table(name = "order_table")
 public class Order {
     @Id
@@ -19,8 +21,8 @@ public class Order {
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "employee_id", nullable = false)
-    private User employee;
+    @JoinColumn(name = "user_id", nullable = false)
+    private User user;
 
     @ManyToOne
     @JoinColumn(name = "product_id", nullable = false)
@@ -31,4 +33,8 @@ public class Order {
     
     @Column(nullable = false)
     private Long qty;
+    
+    public void addQuantity(Long qty) {
+    	this.qty += qty;
+    }
 }

@@ -67,10 +67,10 @@ UNLOCK TABLES;
 -- Table structure for table `employee`
 --
 
-DROP TABLE IF EXISTS `employee`;
+DROP TABLE IF EXISTS `user`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `employee` (
+CREATE TABLE `user` (
   `id` bigint NOT NULL AUTO_INCREMENT,
   `login` varchar(50) NOT NULL,
   `name` varchar(50) NOT NULL,
@@ -85,13 +85,13 @@ CREATE TABLE `employee` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `employee`
+-- Dumping data for table `user`
 --
 
-LOCK TABLES `employee` WRITE;
-/*!40000 ALTER TABLE `employee` DISABLE KEYS */;
-INSERT INTO `employee` VALUES (1,'kostia','Kostia','1',1,'kostia@gmail.com');
-/*!40000 ALTER TABLE `employee` ENABLE KEYS */;
+LOCK TABLES `user` WRITE;
+/*!40000 ALTER TABLE `user` DISABLE KEYS */;
+INSERT INTO `user` VALUES (1,'kostia','Kostia','1',1,'kostia@gmail.com');
+/*!40000 ALTER TABLE `user` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -104,13 +104,13 @@ DROP TABLE IF EXISTS `order_table`;
 CREATE TABLE `order_table` (
   `id` bigint NOT NULL AUTO_INCREMENT,
   `price` double NOT NULL,
-  `employee_id` bigint NOT NULL,
+  `user_id` bigint NOT NULL,
   `product_id` bigint NOT NULL,
   `qty` bigint NOT NULL,
   PRIMARY KEY (`id`),
-  KEY `FKp13udo8mqmmvkusecgsfip71y` (`employee_id`),
+  KEY `FKp13udo8mqmmvkusecgsfip71y` (`user_id`),
   KEY `FKsy1vjcel74cc1kqu4qprjdv4c` (`product_id`),
-  CONSTRAINT `FKp13udo8mqmmvkusecgsfip71y` FOREIGN KEY (`employee_id`) REFERENCES `employee` (`id`),
+  CONSTRAINT `FKp13udo8mqmmvkusecgsfip71y` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`),
   CONSTRAINT `FKsy1vjcel74cc1kqu4qprjdv4c` FOREIGN KEY (`product_id`) REFERENCES `product` (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=26 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;

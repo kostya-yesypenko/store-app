@@ -9,9 +9,9 @@ import java.util.Map;
 
 import org.junit.jupiter.api.Test;
 
-import com.kostik.store.service.userSettings.UserDataUtils;
+import com.kostik.store.service.userData.UserDataUtils;
 
-public class UserSettingsUtilsTest {
+public class UserDataUtilsTest {
 
     @Test
     public void testMapToString() {
@@ -20,7 +20,7 @@ public class UserSettingsUtilsTest {
         data.put("key1", "value1");
         data.put("key2", "value2");
 
-        String result = utils.MapToString(data);
+        String result = utils.mapToString(data);
         assertTrue(result.contains("key1:value1;"));
         assertTrue(result.contains("key2:value2;"));
     }
@@ -30,7 +30,7 @@ public class UserSettingsUtilsTest {
         UserDataUtils utils = new UserDataUtils();
         String input = "key1:value1;key2:value2";
 
-        Map<String, String> result = utils.StringToMap(input);
+        Map<String, String> result = utils.stringToMap(input);
 
         assertEquals(2, result.size());
         assertEquals("value1", result.get("key1"));
@@ -42,7 +42,7 @@ public class UserSettingsUtilsTest {
         UserDataUtils utils = new UserDataUtils();
         String input = "";
 
-        Map<String, String> result = utils.StringToMap(input);
+        Map<String, String> result = utils.stringToMap(input);
 
         assertTrue(result.isEmpty());
     }
@@ -52,7 +52,7 @@ public class UserSettingsUtilsTest {
         UserDataUtils utils = new UserDataUtils();
         Map<String, String> data = new HashMap<>();
 
-        String result = utils.MapToString(data);
+        String result = utils.mapToString(data);
         assertEquals("", result);
     }
 
@@ -61,7 +61,7 @@ public class UserSettingsUtilsTest {
         UserDataUtils utils = new UserDataUtils();
         String input = "key1value1;key2:value2";
 
-        Map<String, String> result = utils.StringToMap(input);
+        Map<String, String> result = utils.stringToMap(input);
 
         assertEquals(1, result.size());
         assertNull(result.get("key1"));
@@ -75,7 +75,7 @@ public class UserSettingsUtilsTest {
         data.put("key:with:colons", "value:with:colons");
         data.put("key;with;semicolons", "value;with;semicolons");
 
-        String result = utils.MapToString(data);
+        String result = utils.mapToString(data);
         assertTrue(result.contains("key:with:colons:value:with:colons;"));
         assertTrue(result.contains("key;with;semicolons:value;with;semicolons;"));
     }

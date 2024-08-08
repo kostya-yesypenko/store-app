@@ -30,10 +30,10 @@ import lombok.extern.slf4j.Slf4j;
 
 @Controller
 @CrossOrigin(origins ="http://localhost:3000", allowedHeaders = "*", allowCredentials = "true")
-@RequestMapping("/api/v1/")
+@RequestMapping("/api/v1/cart")
 @ResponseBody
 @Slf4j
-public class OrderController {
+public class CartController {
 	@Autowired
 	private OrderService orderService;
 	
@@ -46,34 +46,11 @@ public class OrderController {
 	@Autowired
 	private HttpService httpService;
 	
-	@GetMapping("/orders")
-	List<Order> getOrders(){
-		return orderService.getOrders();
-	}
+	
 
-	@PostMapping("/order")
-	public ResponseEntity<?> createOrder(HttpServletRequest request, @RequestBody OrderRequest orderRequest) {
-		try {
-			User user = httpService.getCurrentUserFromSession();
-        	httpService.printCurrentSession();
-
-			Order order = orderService.createOrder(user, orderRequest.getProductId(), orderRequest.getQty(), orderRequest.getPrice());
-			cartService.addOrderToCart(order);
-			
-			return new ResponseEntity<>(order, HttpStatus.CREATED);
-		} catch (UserNotFoundException e) {
-			// Handle the case where the employee is not found
-			String errorMessage = "User is not registered with the provided email.";
-			return new ResponseEntity<>(errorMessage, HttpStatus.NOT_FOUND);
-		} catch (ProductNotFoundException e) {
-			// Handle the case where the product is not found
-			String errorMessage = "Product not found with the provided ID.";
-			return new ResponseEntity<>(errorMessage, HttpStatus.NOT_FOUND);
-		} catch (Exception e) {
-			// Handle other exceptions
-			e.printStackTrace();
-			return new ResponseEntity<>("Error creating the order. Please try again.", HttpStatus.INTERNAL_SERVER_ERROR);
-		}
+	@PostMapping("/checkout")
+	public void checkoutCart() {
+		cartService.checkout();
 	}
 	
 

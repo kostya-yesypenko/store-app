@@ -10,20 +10,21 @@ import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
-import com.kostik.store.domain.Employee;
-import com.kostik.store.repository.EmployeeRepository;
+
+import com.kostik.store.domain.User;
+import com.kostik.store.repository.UserRepository;
 
 @SpringBootTest
 public class EmployeeServiceTests {
 
-    private EmployeeService employeeService;
+    private UserService userService;
 
-    private EmployeeRepository employeeRepository;
+    private UserRepository userRepository;
 
     @BeforeEach
     public void setup() {
-        employeeRepository = mock(EmployeeRepository.class);
-        employeeService = new EmployeeService(employeeRepository);
+        userRepository = mock(UserRepository.class);
+        userService = new UserService(userRepository);
     }
 
     @Test
@@ -33,10 +34,10 @@ public class EmployeeServiceTests {
         User mockEmployee = new User();
         mockEmployee.setLogin(testLogin);
 
-        when(employeeRepository.findByLogin(testLogin)).thenReturn(mockEmployee);
+        when(userRepository.findByLogin(testLogin)).thenReturn(mockEmployee);
 
         // Act
-        User result = employeeService.findByLogin(testLogin);
+        User result = userService.findByLogin(testLogin);
 
         // Assert
         assertThat(result).isNotNull();
@@ -48,10 +49,10 @@ public class EmployeeServiceTests {
         // Arrange
         List<User> mockEmployees = Arrays.asList(new User(), new User(), new User());
 
-        when(employeeRepository.findAll()).thenReturn(mockEmployees);
+        when(userRepository.findAll()).thenReturn(mockEmployees);
 
         // Act
-        List<User> result = employeeService.getUsers();
+        List<User> result = userService.getUsers();
 
         // Assert
         assertThat(result).isNotNull();
