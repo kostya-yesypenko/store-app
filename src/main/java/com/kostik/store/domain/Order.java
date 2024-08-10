@@ -1,5 +1,8 @@
 package com.kostik.store.domain;
 
+import java.time.LocalDateTime;
+import java.util.Date;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -14,7 +17,7 @@ import lombok.EqualsAndHashCode;
 @Data
 @Entity
 @EqualsAndHashCode(of = {"user", "product"})
-@Table(name = "order_table")
+@Table(name = "orders")
 public class Order {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -33,6 +36,9 @@ public class Order {
     
     @Column(nullable = false)
     private Long qty;
+    
+    @Column(name = "date_modified", nullable = false)
+    private LocalDateTime dateModified;
     
     public void addQuantity(Long qty) {
     	this.qty += qty;

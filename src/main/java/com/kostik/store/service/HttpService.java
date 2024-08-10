@@ -110,6 +110,10 @@ public class HttpService {
 		httpSession.setAttribute(Attr.USER.name(), user);
 	}
 	
+	public void deleteCurrentUserfromSession(User user) {
+		httpSession.setAttribute(Attr.USER.name(), null);
+	}
+	
 	public void printCurrentSession() {
 		log.info("Current Session ID = {}", httpSession.getId());
 	}

@@ -12,9 +12,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.RestController;
 
 import com.kostik.store.domain.Order;
+import com.kostik.store.domain.Product;
 import com.kostik.store.domain.User;
 import com.kostik.store.dto.OrderRequest;
 import com.kostik.store.service.CartService;
@@ -22,10 +22,10 @@ import com.kostik.store.service.HttpService;
 import com.kostik.store.service.OrderService;
 import com.kostik.store.service.OrderService.ProductNotFoundException;
 import com.kostik.store.service.OrderService.UserNotFoundException;
+import com.kostik.store.service.ProductService;
 import com.kostik.store.service.userData.UserDataProvider;
 
 import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpSession;
 import lombok.extern.slf4j.Slf4j;
 
 @Controller
@@ -46,6 +46,9 @@ public class OrderController {
 	@Autowired
 	private HttpService httpService;
 	
+	@Autowired
+	private ProductService productService;
+	
 	@GetMapping("/orders")
 	List<Order> getOrders(){
 		return orderService.getOrders();
@@ -59,7 +62,9 @@ public class OrderController {
 
 			Order order = orderService.createOrder(user, orderRequest.getProductId(), orderRequest.getQty(), orderRequest.getPrice());
 			cartService.addOrderToCart(order);
-			
+			Product product = productService.getProductById(order.getProduct().getId());
+			product.setQty(product.getQty()-order.getQty());
+			productService.save(product);
 			return new ResponseEntity<>(order, HttpStatus.CREATED);
 		} catch (UserNotFoundException e) {
 			// Handle the case where the employee is not found
