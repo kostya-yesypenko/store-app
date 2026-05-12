@@ -19,21 +19,21 @@ import jakarta.servlet.http.HttpSession;
 @RestController
 @CrossOrigin("http://localhost:3000")
 @RequestMapping("/api/v1")
-public class EmployeeController {
+public class UserController {
 	@Autowired
 	private UserService userService;
 
 
-	@GetMapping("/employees")
+	@GetMapping("/users")
 	List<User> getUsers(){
 		return userService.getUsers();
 	}
 
-	@GetMapping("/employee")
+	@GetMapping("/user")
     ResponseEntity<User> getSessionEmployee(HttpSession session) {
-        User employee = (User) session.getAttribute("employee");
-        if (employee != null) {
-            return new ResponseEntity<>(employee, HttpStatus.OK);
+        User user = (User) session.getAttribute("user");
+        if (user != null) {
+            return new ResponseEntity<>(user, HttpStatus.OK);
         }
         return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
     }

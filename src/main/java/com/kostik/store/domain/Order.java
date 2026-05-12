@@ -1,5 +1,8 @@
 package com.kostik.store.domain;
 
+import java.time.LocalDateTime;
+import java.util.Date;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -9,18 +12,20 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 @Data
 @Entity
-@Table(name = "order_table")
+@EqualsAndHashCode(of = {"user", "product"})
+@Table(name = "orders")
 public class Order {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "employee_id", nullable = false)
-    private User employee;
+    @JoinColumn(name = "user_id", nullable = false)
+    private User user;
 
     @ManyToOne
     @JoinColumn(name = "product_id", nullable = false)
@@ -31,4 +36,11 @@ public class Order {
     
     @Column(nullable = false)
     private Long qty;
+    
+    @Column(name = "date_modified", nullable = false)
+    private LocalDateTime dateModified;
+    
+    public void addQuantity(Long qty) {
+    	this.qty += qty;
+    }
 }

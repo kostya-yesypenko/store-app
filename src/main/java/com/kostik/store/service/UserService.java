@@ -1,6 +1,7 @@
 package com.kostik.store.service;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -12,18 +13,18 @@ import com.kostik.store.repository.UserRepository;
 public class UserService {
 	
 	@Autowired
-	private UserRepository UserRepository;
+	private UserRepository userRepository;
 	
-	public UserService(UserRepository employeeRepository) {
-		this.UserRepository = employeeRepository;
+	public UserService(UserRepository userRepository) {
+		this.userRepository = userRepository;
 	}
 
-	public User findByLogin(String login) {
-		return UserRepository.findByLogin(login);
+    public Optional<User> findByLogin(String login){
+		return userRepository.findByLogin(login);
 	}
 
 	public List<User> getUsers() {
-		return UserRepository.findAll();
+		return userRepository.findAll();
 	}
 	
 	
